@@ -1,22 +1,32 @@
 import express, { Request, Response } from "express";
+import dotenv from "dotenv";
 import connectDB from "./db/connectDB";
+import userRoutes from "./routes/userRoutes";
+import habitsRoutes from "./routes/habitsRoutes";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-const uri =
-  "mongodb+srv://lavishgent:foMc6OiCzBhPVbvQ@cluster0.zatrz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.DB_URI;
+
+if (!uri) {
+  throw new Error("DB_URI is not defined in the environment variables");
+}
+
 connectDB(uri);
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
-// Basic route
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, TypeScript with Node.js!");
+  res.send("nothing to see here");
 });
 
-// Start the server
+app.use("/api/users", userRoutes);
+app.use("/api/habits", habitsRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+  console.log("JWT_SECRET:", process.env.JWT_SECRET);
 });
