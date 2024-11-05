@@ -1,12 +1,14 @@
 import express, { Request, Response } from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./db/connectDB";
 import userRoutes from "./routes/userRoutes";
 import habitsRoutes from "./routes/habitsRoutes";
 
 dotenv.config();
-
 const app = express();
+app.use(cors({ origin: "http://localhost:5173" }));
+
 const PORT = process.env.PORT || 8080;
 
 const uri = process.env.DB_URI;
